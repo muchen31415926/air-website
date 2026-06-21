@@ -1,0 +1,37 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 本地虛擬環境
+.env
+.venv
+env/
+venv/
+ENV/
+
+# C 語言編譯產生的擴展檔
+*.so
+
+# 套件打包與散佈檔案
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 測試與覆蓋率報告
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
