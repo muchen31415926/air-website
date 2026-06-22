@@ -1,0 +1,32 @@
+body {
+    background-color: #0d1117;
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #e6edf3;
+}
+
+.graph {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+
+    padding: 15px;
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 0 8px rgba(0,255,255,0.05),
+        0 0 20px rgba(0,255,255,0.03);
+
+    transition: all 0.25s ease;
+}
+
+.graph:hover {
+    border-color: #58a6ff;
+
+    box-shadow:
+        0 0 12px rgba(88,166,255,0.25),
+        0 0 30px rgba(88,166,255,0.08);
+
+    transform: translateY(-2px);
+}

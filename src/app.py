@@ -1,12 +1,14 @@
-from dash import Dash, html, callback, Output, Input, dcc
+from dash import Dash, html, callback, Output, Input, dcc, Patch
 
-from charts import get_graphs, get_figures
+from graph import GraphManager
 
 
 app = Dash()
+graph_manager = GraphManager()
+
 app.layout = [
     html.H1(children='Air Quality Monitor', style={'textAlign':'center'}),
-    html.Div(id='graphs-container', children=get_graphs()),
+    html.Div(id='graphs-container', children=graph_manager.create_graphs()),
     dcc.Interval(id="update-interval", interval=3*1000)
 ]
 
@@ -18,7 +20,7 @@ app.layout = [
     Input('update-interval', 'n_intervals')
 )
 def update_figures(_):
-    return get_figures()
+    return graph_manager.create_patches()
 
 if __name__ == '__main__':
     app.run(debug=True)
