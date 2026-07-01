@@ -1,5 +1,6 @@
 from dash import html, dcc, Patch
 import plotly.express as px
+import dash_bootstrap_components as dbc
 
 from db_wrapper import DBWrapper
 
@@ -9,21 +10,25 @@ class GraphManager:
         self.db = DBWrapper()
         self.fields = ['tvoc', 'eco2', 'pm25', 'pm10']
 
-    def create_graphs(self):    
-        docs = self._get_db_data()
+    def create_graphs(self, time_unit):    
+        docs = self._get_db_docs(time_unit)
         
         graphs = []   
         for field in self.fields:      
-            fig = self._create_figure(docs, field)    
+            fig = self._create_figure(docs, field, time_unit)    
             
-            graph = dcc.Graph(id=f'{field}-graph', figure=fig)
+            graph = dcc.Graph(id=f'{time_unit}-{field}-graph', figure=fig)
             graph_div = html.Div(className='graph', children=graph)
 
-            graphs.append(graph_div)
-        return graphs
+            if time_unit == "second":
+                graphs.append(dbc.Col(graph_div, width=6))                          
+            else:
+                graphs.append(graph_div)
+        
+        return dbc.Row(graphs)
 
-    def create_patches(self):
-        docs = self._get_db_data()
+    def create_patches(self, time_unit):
+        docs = self._get_db_docs(time_unit)
 
         patches = []  
         for field in self.fields:  
@@ -36,7 +41,7 @@ class GraphManager:
             patches.append(patch)
         return patches
 
-    def _create_figure(self, docs, field):       
+    def _create_figure(self, docs, field, time_unit):       
         x, y = self._get_xy_data(docs, field) 
         fig = px.line(x=x, y=y)      
           
@@ -69,8 +74,8 @@ class GraphManager:
         
         return fig
 
-    def _get_db_data(self):
-        return self.db.find_data()
+    def _get_db_docs(self, time_unit):
+        return self.db.find_data(time_unit)
 
     @staticmethod
     def _get_xy_data(docs, field):
