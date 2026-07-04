@@ -4,11 +4,13 @@ import dash_bootstrap_components as dbc
 from graph import GraphManager
 from sensor import SensorManager
 
-app = Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+dash_app = Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash_app.server
+
 graph_manager = GraphManager()
 sensor_manager = SensorManager()
 
-app.layout = [
+dash_app.layout = [
     html.H5(id='sensor-status', children='Sensor： 線上🟢', style={'textAlign':'left'}),
     html.Div(children=graph_manager.create_graphs(time_unit="second")),
     html.Div(children=graph_manager.create_graphs(time_unit="minute")),
@@ -48,4 +50,4 @@ def update_sensor_Status(_):
     return 'Sensor：🔴Offline'
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    dash_app.run(debug=True)
