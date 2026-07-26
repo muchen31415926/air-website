@@ -10,8 +10,11 @@ class GraphManager:
         self.db = DBWrapper()
         self.fields = ['tvoc', 'eco2', 'pm25', 'pm10']
 
-    def create_graphs(self, time_unit):    
+    def create_graphs(self, time_unit):  
+        print(f'create_graphs({time_unit}): started')
+
         docs = self._get_db_docs(time_unit)
+        print(f'create_graphs({time_unit}): got data from db')
         
         graphs = []   
         for field in self.fields:      
@@ -25,11 +28,15 @@ class GraphManager:
                 graphs.append(dbc.Col(graph_div, width=6))                                          
             else:
                 graphs.append(graph_div)
-        
+
+        print(f'create_graphs({time_unit}): finished')
         return dbc.Row(graphs)
 
-    def create_patches(self, time_unit):
+    def update_graphs(self, time_unit):
+        print(f'update_graphs({time_unit}): started')
+
         docs = self._get_db_docs(time_unit)
+        print(f'update_graphs({time_unit}): got data from db')
 
         patches = []  
         for field in self.fields:  
@@ -40,6 +47,8 @@ class GraphManager:
             patch["data"][0]["y"] = y
 
             patches.append(patch)
+
+        print(f'update_graphs({time_unit}): finished')
         return patches
 
     def _create_figure(self, docs, field):       

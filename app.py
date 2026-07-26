@@ -11,7 +11,7 @@ graph_manager = GraphManager()
 sensor_manager = SensorManager()
 
 dash_app.layout = [
-    html.H5(id='sensor-status', children='Sensor： 線上🟢', style={'textAlign':'left'}),
+    html.H5(id='sensor-status', children='', style={'textAlign':'left'}),
     html.Div(children=graph_manager.create_graphs(time_unit="second")),
     html.Div(children=graph_manager.create_graphs(time_unit="minute")),
     dcc.Interval(id="second-update-interval", interval=3*1000),
@@ -27,7 +27,7 @@ dash_app.layout = [
     Input('second-update-interval', 'n_intervals')
 )
 def update_second_figures(_):
-    return graph_manager.create_patches(time_unit="second")
+    return graph_manager.update_graphs(time_unit="second")
 
 @callback(
     Output('minute-tvoc-graph', 'figure'),
@@ -37,7 +37,7 @@ def update_second_figures(_):
     Input('minute-update-interval', 'n_intervals')
 )
 def update_minute_figures(_):
-    return graph_manager.create_patches(time_unit="minute")
+    return graph_manager.update_graphs(time_unit="minute")
 
 @callback(
     Output('sensor-status', 'children'),
