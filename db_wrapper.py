@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
@@ -7,6 +8,7 @@ from pymongo import MongoClient
 load_dotenv()
 
 uri = os.getenv("MONGODB_URI")
+UTC_TZ = ZoneInfo("UTC")
 TAIPEI_TZ = ZoneInfo("Asia/Taipei")
 
 
@@ -29,6 +31,12 @@ class DBWrapper:
         self._convert_to_taipei_time(results)
 
         return results
+
+    def delete_docs(self):
+        cutoff = datetime.now(UTC_TZ) - timedelta(days=1)
+
+        self.db.second_air_data.delete_many({"timestamp": {"$lt": cutoff}})
+        self.db.minute_air_data.delete_many({"timestamp": {"$lt": cutoff}})
 
     @staticmethod
     def _convert_to_taipei_time(docs):
