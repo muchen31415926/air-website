@@ -16,6 +16,12 @@ class GraphManager:
         docs = self._get_db_docs(time_unit)
         print(f"create_graphs({time_unit}): got data from db")
 
+        width = (
+            {"xs": 12, "sm": 12, "md": 6, "lg": 6}
+            if time_unit == "second"
+            else {"xs": 12, "sm": 12, "md": 12, "lg": 12}
+        )
+
         graphs = []
         for field in self.fields:
             fig = self._create_figure(docs, field)
@@ -24,10 +30,7 @@ class GraphManager:
             graph = dcc.Graph(id=f"{time_unit}-{field}-graph", figure=fig)
             graph_div = html.Div(className="graph", children=graph)
 
-            if time_unit == "second":
-                graphs.append(dbc.Col(graph_div, width=6))
-            else:
-                graphs.append(graph_div)
+            graphs.append(dbc.Col(graph_div, **width))
 
         print(f"create_graphs({time_unit}): finished")
         return dbc.Row(graphs)
@@ -52,9 +55,11 @@ class GraphManager:
         return patches
 
     def _create_figure(self, docs, field):
+        if not docs:
+            return px.line()
+
         x, y = self._get_xy_data(docs, field)
-        fig = px.line(x=x, y=y)
-        return fig
+        return px.line(x=x, y=y)
 
     def _set_figure_layout(self, fig, field, time_unit):
         common = {
